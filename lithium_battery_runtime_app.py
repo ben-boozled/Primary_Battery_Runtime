@@ -9,6 +9,7 @@ Calculates the theoretical runtime of a non-rechargeable lithium metal battery.
 Uses the Energiser L91 Ultimate Lithium AA Battery as a standard for the parameters.
 """
 
+import streamlit as st # documentation https://docs.streamlit.io/get-started/fundamentals/main-concepts
 import pandas as pd
 
 class Battery:
@@ -230,7 +231,31 @@ class Battery:
         self._battery_runtime = self.calculate_runtime()
         return 0
 
+st.title("Lithium Battery Runtime Calculator")
+
+# Collect parameters for calculation
+battery_capacity = st.number_input("**Battery Capacity / mAh**", min_value=0, step=1, 
+                                   help="For a bank of identical batteries, if batteries are in series, mAh capacity " \
+                                   "remains the same as a single battery. If batteries are in parallel, mAh " \
+                                   "capacities are added together.")
+operating_temp = st.number_input("**Operating Temperature / °C**", step=0.1, format="%0.1f", help="Typical operating " \
+                                "temperature range for high-quality lithium metal batteries is -40°C to 60°C.")
+load_current = st.number_input("**Load Current / mA**", min_value = 0, step=1)
+load_duration_per_day = st.number_input("**_Load Duration Per Day / s (Optional)_**", min_value=0, max_value=86400, 
+                                        help="Defaults to 86400s.")
+sleep_current = st.number_input("**_Sleep Current / mA (Optional)_**", step=1, help="Defaults to 0mA.")
+
+# Button to initiate calculation of battery runtime
+clicked = st.button("Calculate Runtime")
+
+# Loading progress bar for calculation
+# Display battery runtime results
+
+# To display on local Streamlit server, run "streamlit run lithium_battery_runtime_app.py" in terminal
+
 if __name__ == "__main__":
     TestBattery = Battery(16000, -35, 90, 5*48, 0.060167) 
     TestBattery.update_battery_properties()
     print(TestBattery.battery_details()) # expected battery runtime of 1260 days
+
+    
