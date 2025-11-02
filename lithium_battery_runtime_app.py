@@ -1,7 +1,7 @@
 """
 Filename: lithium_battery_runtime_app.py
 Author: Benjamin Goh
-Date: 1 November 2025
+Date: 2 November 2025
 Version: 1.0.0
 
 Description: 
@@ -257,5 +257,3 @@ if __name__ == "__main__":
     TestBattery = Battery(16000, -35, 90, 5*48, 0.060167) 
     TestBattery.update_battery_properties()
     print(TestBattery.battery_details()) # expected battery runtime of 1260 days
-
-    
