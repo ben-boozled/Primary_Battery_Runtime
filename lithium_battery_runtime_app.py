@@ -233,8 +233,9 @@ class Battery:
         self._battery_runtime = self.calculate_runtime()
         return 0
 
-st.title("Lithium Battery Runtime Calculator")
-st.markdown("Created by: Benjamin Goh")
+st.title("Battery Runtime Calculator")
+st.markdown("**Created by: Benjamin Goh**")
+st.write("Calculator to estimate the runtime of non-rechargeable lithium metal batteries.")
 
 # Collect parameters for calculation
 with st.container(border=True):
@@ -253,26 +254,29 @@ with st.container(border=True):
 clicked = st.button("Calculate Runtime", type="primary")
 
 if clicked:
-    
-    # Loading progress bar for calculation
-
     # Compute results
     DeviceBattery = Battery(battery_capacity, operating_temp, load_current, load_duration_per_day, sleep_current)
     DeviceBattery.update_battery_properties()
     battery_details = DeviceBattery.battery_details()
 
     # Display battery runtime results
-    with st.container(border=True, gap=None):
-        st.write(f"**Estimated Battery Runtime: {DeviceBattery.battery_runtime:.2f} day(s) OR {DeviceBattery.battery_runtime/365:.2f} year(s)**")
-        st.write(f"- Effective Battery Capacity at {DeviceBattery.operating_temp:.1f}°C: {DeviceBattery.effective_battery_capacity:.0f} mAh")
-        st.write(f"- Annual Self-discharge Rate: {DeviceBattery.self_discharge_rate:.2%}")
-        st.write(f"- Daily Consumption from Load: {DeviceBattery.load_current*DeviceBattery.load_duration_per_day/3600:.2f} mAh")
-        st.write(f"- Daily Consumption from Sleep: {DeviceBattery.sleep_current*DeviceBattery.sleep_duration_per_day/3600:.2f} mAh")
+    with st.container(border=True):
+
+        result = f"""**Estimated Battery Runtime: {DeviceBattery.battery_runtime:.2f} day(s) OR {DeviceBattery.battery_runtime/365:.2f} year(s)**
+        \n- Effective Battery Capacity: {DeviceBattery.effective_battery_capacity:.0f} mAh at {DeviceBattery.operating_temp:.1f}°C
+        \n- Self-discharge Rate: {DeviceBattery.self_discharge_rate:.2%} per year
+        \n- Load Consumption: {DeviceBattery.load_current*DeviceBattery.load_duration_per_day/3600:.2f} mAh per day
+        \n- Sleep Consumption: {DeviceBattery.sleep_current*DeviceBattery.sleep_duration_per_day/3600:.2f} mAh per day
+        """
+        st.write(result)
         
+        st.caption("_Note: These calculations are theoretical estimates of battery life. The actual battery runtime " \
+                   "may vary depending on real-world conditions._")
+    
 # To display on local Streamlit server, run "streamlit run lithium_battery_runtime_app.py" in terminal
 
 # if __name__ == "__main__":
 #     # Test Case
-#     TestBattery = Battery(16000, -35, 90, 5*48, 0.060167) 
+#     TestBattery = Battery(16000, -35, 90, 240, 0.060167) 
 #     TestBattery.update_battery_properties()
 #     print(TestBattery.battery_details()) # expected battery runtime of 1260 days
