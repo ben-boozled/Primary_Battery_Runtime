@@ -207,7 +207,7 @@ class Battery:
         battery_runtime = self.effective_battery_capacity / total_daily_consumption # in days
 
         if battery_runtime/365 >= self.max_shelf_life:
-            battery_runtime = float(0)
+            battery_runtime = self.max_shelf_life*365
 
         return battery_runtime
     
