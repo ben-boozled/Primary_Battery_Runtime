@@ -5,8 +5,11 @@ Date: 2 November 2025
 Version: 1.0.0
 
 Description: 
-Calculates the theoretical runtime of a non-rechargeable lithium metal battery.
-Uses the Energiser L91 Ultimate Lithium AA Battery as a standard for the parameters.
+Calculates the theoretical runtime of a non-rechargeable primary battery.
+
+Uses the following battery models as reference to calculate the temperature effects on battery capacity:
+· Lithium metal batteries: AA Energiser L91 lithium battery (operating temperature: -40°C to 60°C).
+· Alkaline batteries: AA Energiser LR6 alkaline battery (operating temperature: -18°C to 55°C).
 """
 
 import streamlit as st # documentation https://docs.streamlit.io/get-started/fundamentals/main-concepts
@@ -35,7 +38,9 @@ class Battery:
     """
 
     # Attributes
-    def __init__(self, battery_capacity, operating_temp, load_current, load_duration_per_day=86400, sleep_current=0):
+    def __init__(self, battery_type, battery_capacity, operating_temp, load_current, load_duration_per_day=86400, 
+                 sleep_current=0):
+        self.battery_type = battery_type
         self.battery_capacity = battery_capacity # mAh
         self.operating_temp = operating_temp # Celsius
         self.load_current = load_current # mA
@@ -51,6 +56,15 @@ class Battery:
         self._temperature_factor = None # no units
         self._effective_battery_capacity = None # mAh
         self._battery_runtime = None # days
+
+    @property
+    def battery_type(self):
+        return self._battery_type
+    
+    @battery_type.setter
+    def battery_type(self, value):
+        if value in ["Lithium Metal", "Alkaline"]:
+            self._battery_type = value
 
     @property
     def battery_capacity(self):
@@ -144,6 +158,7 @@ class Battery:
             dict: all battery properties and their corresponding values 
         """
         return {
+            "Battery Type": self.battery_type,
             "Battery Capacity (mAh)": self.battery_capacity,
             "Operating Temperature (°C)": self.operating_temp,
             "Load Current (mA)": self.load_current,
@@ -235,9 +250,19 @@ class Battery:
 
 st.title("Battery Runtime Calculator")
 st.markdown("**Created by: Benjamin Goh**")
-st.write("Calculator to estimate the runtime of non-rechargeable lithium metal batteries.")
+st.write("Calculator to estimate the runtime of non-rechargeable batteries.")
 
 # Collect parameters for calculation
+battery_type = None
+battery_capacity = None
+operating_temp = None
+load_current = None
+load_duration_per_day = None
+sleep_current = None
+
+with st.container(border=True):
+    battery_type = st.radio("**Battery Type**", ["Lithium Metal", "Alkaline"], index=0, horizontal=True)
+
 with st.container(border=True):
     battery_capacity = st.number_input("**Battery Capacity / mAh**", min_value=0, step=1, 
                                     help="For a bank of identical batteries, if batteries are in series, mAh capacity " \
@@ -255,14 +280,14 @@ clicked = st.button("Calculate Runtime", type="primary")
 
 if clicked:
     # Compute results
-    DeviceBattery = Battery(battery_capacity, operating_temp, load_current, load_duration_per_day, sleep_current)
+    DeviceBattery = Battery(battery_type, battery_capacity, operating_temp, load_current, load_duration_per_day, sleep_current)
     DeviceBattery.update_battery_properties()
     battery_details = DeviceBattery.battery_details()
 
     # Display battery runtime results
     with st.container(border=True):
 
-        result = f"""**Estimated Battery Runtime: {DeviceBattery.battery_runtime:.2f} day(s) OR {DeviceBattery.battery_runtime/365:.2f} year(s)**
+        result = f"""**Estimated Battery Runtime: {DeviceBattery.battery_runtime//365:.0f} year(s) {DeviceBattery.battery_runtime/365%1*365:.0f} day(s)**
         \n- Effective Battery Capacity: {DeviceBattery.effective_battery_capacity:.0f} mAh at {DeviceBattery.operating_temp:.1f}°C
         \n- Self-discharge Rate: {DeviceBattery.self_discharge_rate:.2%} per year
         \n- Load Consumption: {DeviceBattery.load_current*DeviceBattery.load_duration_per_day/3600:.2f} mAh per day
@@ -270,13 +295,13 @@ if clicked:
         """
         st.write(result)
         
-        st.caption("_Note: These calculations are theoretical estimates of battery life. The actual battery runtime " \
-                   "may vary depending on real-world conditions._")
+        st.caption("_Note: These calculations are theoretical estimates. The actual battery runtime " \
+                   "may vary depending on additional factors such as real-world conditions and system efficiency._")
     
 # To display on local Streamlit server, run "streamlit run lithium_battery_runtime_app.py" in terminal
 
-# if __name__ == "__main__":
-#     # Test Case
-#     TestBattery = Battery(16000, -35, 90, 240, 0.060167) 
-#     TestBattery.update_battery_properties()
-#     print(TestBattery.battery_details()) # expected battery runtime of 1260 days
+if __name__ == "__main__":
+    # Test Case
+    TestBattery = Battery("Lithium Metal", 16000, -35, 90, 240, 0.060167) 
+    TestBattery.update_battery_properties()
+    print(TestBattery.battery_details()) # expected battery runtime of 1260 days
