@@ -344,8 +344,7 @@ with st.container(border=True):
                                     help="For a bank of identical batteries, if batteries are in series, mAh capacity " \
                                     "remains the same as a single battery. If batteries are in parallel, mAh " \
                                     "capacities are added together.")
-    operating_temp = st.number_input("**Operating Temperature / °C**", step=0.1, format="%0.1f", help="Typical operating " \
-                                    "temperature range for high-quality lithium metal batteries is -40°C to 60°C.")
+    operating_temp = st.number_input("**Operating Temperature / °C**", step=0.1, format="%0.1f")
     load_current = st.number_input("**Load Current / mA**", min_value=0.00)
     load_duration_per_day = st.number_input("**Load Duration Per Day / s**", min_value=0.0, max_value=86400.0, step=0.1, 
                                             format="%0.1f", help="0s to 86400s.")
@@ -364,6 +363,7 @@ if clicked:
     with st.container(border=True):
 
         result = f"""**Estimated Battery Runtime: {DeviceBattery.battery_runtime//365:.0f} year(s) {DeviceBattery.battery_runtime/365%1*365:.0f} day(s)**
+        \n- Operating Temperature Limits: {DeviceBattery.min_operating_temp}°C to {DeviceBattery.max_operating_temp}°C
         \n- Effective Battery Capacity: {DeviceBattery.effective_battery_capacity:.0f} mAh at {DeviceBattery.operating_temp:.1f}°C
         \n- Self-discharge Rate: {DeviceBattery.self_discharge_rate:.2%} per year
         \n- Load Consumption: {DeviceBattery.load_current*DeviceBattery.load_duration_per_day/3600:.2f} mAh per day
@@ -374,9 +374,9 @@ if clicked:
         st.caption("_Note: These calculations are theoretical estimates. The actual battery runtime " \
                    "may vary depending on additional factors such as real-world conditions and system efficiency._")
     
-if __name__ == "__main__":
-    # Test Case
-    # TestBattery = Battery("Lithium Metal", 16000, 50, 90, 240, 0.06) # expected battery runtime of 2031 days
-    TestBattery = Battery("Lithium Metal", 16000, -35, 1500, 2000, 0.06) 
-    TestBattery.update_battery_properties()
-    print(TestBattery.battery_details()) 
+# if __name__ == "__main__":
+#     # Test Case
+#     # TestBattery = Battery("Lithium Metal", 16000, 50, 90, 240, 0.06) # expected battery runtime of 2031 days
+#     TestBattery = Battery("Lithium Metal", 16000, -35, 1500, 2000, 0.06) 
+#     TestBattery.update_battery_properties()
+#     print(TestBattery.battery_details()) 
