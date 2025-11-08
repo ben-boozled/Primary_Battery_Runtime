@@ -1,7 +1,7 @@
 """
 Filename: battery_runtime_app.py
 Author: Benjamin Goh
-Date: 2 November 2025
+Date: 8 November 2025
 Version: 1.0.0
 
 Description: 
@@ -24,27 +24,27 @@ class Battery:
     Attributes
     ----------
     battery_type: str
-        battery type of either "Lithium Metal" (Default) or "Alkaline"
+        battery type of either "Lithium Metal" (default) or "Alkaline"
     
     battery_capacity : int
-        capacity of battery in mAh
+        capacity of battery in mAh, default is 0
 
     operating_temp : float
-        operating temperature of device in Celsius
+        operating temperature of device in Celsius, default is 25
 
     load_current : int
-        maximum current draw when load is active in mA
+        maximum current draw when load is active in mA, default is 0
 
     load_duration_per_day : int
-        duration that load is run in seconds
+        duration that load is run in seconds, default is 86400
 
     sleep_current : int
-        current draw when device is in sleep mode in mA
+        current draw when device is in sleep mode in mA, default is 0
     """
 
     # Attributes
-    def __init__(self, battery_type, battery_capacity, operating_temp, load_current, load_duration_per_day=86400, 
-                 sleep_current=0):
+    def __init__(self, battery_type="Lithium Metal", battery_capacity=0, operating_temp=25, load_current=0, 
+                 load_duration_per_day=86400, sleep_current=0):
         self.battery_type = battery_type
         self.battery_capacity = battery_capacity # mAh
         self.operating_temp = operating_temp # Celsius
@@ -314,7 +314,7 @@ class Battery:
         if self.battery_type == "Alkaline":
             self._min_operating_temp = -18 # Celsius
             self._max_operating_temp = 55
-            self._max_shelf_life = 10
+            self._max_shelf_life = 10 # years
 
         self._sleep_duration_per_day = 86400 - self.load_duration_per_day
         self._average_current_draw = round(self.load_current*self.load_duration_per_day/86400 + self.sleep_current*self.sleep_duration_per_day/86400,3)    
@@ -329,33 +329,27 @@ st.markdown("**Created by: Benjamin Goh**")
 st.write("Calculator to estimate the runtime of non-rechargeable batteries.")
 
 # Collect parameters for calculation
-battery_type = None
-battery_capacity = None
-operating_temp = None
-load_current = None
-load_duration_per_day = None
-sleep_current = None
+DeviceBattery = Battery()
 
 with st.container(border=True):
-    battery_type = st.radio("**Battery Type**", ["Lithium Metal", "Alkaline"], index=0, horizontal=True)
+    DeviceBattery.battery_type = st.radio("**Battery Type**", ["Lithium Metal", "Alkaline"], index=0, horizontal=True)
 
 with st.container(border=True):
-    battery_capacity = st.number_input("**Battery Capacity / mAh**", min_value=0, step=1, 
-                                    help="For a bank of identical batteries, if batteries are in series, mAh capacity " \
-                                    "remains the same as a single battery. If batteries are in parallel, mAh " \
-                                    "capacities are added together.")
-    operating_temp = st.number_input("**Operating Temperature / °C**", step=0.1, format="%0.1f")
-    load_current = st.number_input("**Load Current / mA**", min_value=0.00)
-    load_duration_per_day = st.number_input("**Load Duration Per Day / s**", min_value=0.0, max_value=86400.0, step=0.1, 
-                                            format="%0.1f", help="0s to 86400s.")
-    sleep_current = st.number_input("**_Sleep Current / mA (Optional)_**", min_value=0.00)
+    DeviceBattery.battery_capacity = st.number_input("**Battery Capacity / mAh**", min_value=0, step=1, help="For a " \
+                                    "bank of identical batteries, if batteries are in series, mAh capacity remains the " \
+                                    "same as a single battery. If batteries are in parallel, mAh capacities are added " \
+                                    "together.")
+    DeviceBattery.operating_temp = st.number_input("**Operating Temperature / °C**", step=0.1, format="%0.1f")
+    DeviceBattery.load_current = st.number_input("**Load Current / mA**", min_value=0.00)
+    DeviceBattery.load_duration_per_day = st.number_input("**Load Duration Per Day / s**", min_value=0.0, max_value=86400.0, 
+                                                          step=0.1, format="%0.1f", help="0s to 86400s.")
+    DeviceBattery.sleep_current = st.number_input("**_Sleep Current / mA (Optional)_**", min_value=0.00)
 
 # Button to initiate calculation of battery runtime
 clicked = st.button("Calculate Runtime", type="primary")
 
 if clicked:
     # Compute results
-    DeviceBattery = Battery(battery_type, battery_capacity, operating_temp, load_current, load_duration_per_day, sleep_current)
     DeviceBattery.update_battery_properties()
     battery_details = DeviceBattery.battery_details()
 
