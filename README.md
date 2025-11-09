@@ -1,11 +1,14 @@
 # Description
-This repository contains the code for a primary battery runtime calculator that estimates the runtime of lithium metal and alkaline batteries. Feel free to try out the calculator application [here](https://primary-battery-runtime.streamlit.app/). 
+This repository contains the code for a calculator that estimates the runtime of non-rechargeable lithium metal and alkaline batteries. Feel free to try out the calculator application [here](https://primary-battery-runtime.streamlit.app/). 
 
 # Running Locally
 If you are interested in running the application locally, I recommend first creating a Python virual environment. 
 
 Open the command line and follow the steps below:
 1. Change the working directory to the location where you want to clone the repository.
+```
+cd <path to working directory>
+```
 2. Clone the respository.
 ```
 git clone https://github.com/ben-boozled/Primary_Battery_Runtime.git
