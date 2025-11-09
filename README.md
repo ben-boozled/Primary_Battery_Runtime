@@ -35,4 +35,4 @@ pip install -r requirements.txt
 streamlit run battery_runtime_app.py
 ```
 
-To deactivate the virtual environment, Enter `deactivate` into the command line.
+To deactivate the virtual environment, enter `deactivate` into the command line.
