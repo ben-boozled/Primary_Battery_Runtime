@@ -16,6 +16,7 @@ To display on local Streamlit server, run "streamlit run battery_runtime_app.py"
 
 import streamlit as st # documentation https://docs.streamlit.io/get-started/fundamentals/main-concepts
 import pandas as pd
+import time
 
 class Battery:
     """
@@ -355,6 +356,14 @@ if clicked:
 
     # Display battery runtime results
     with st.container(border=True):
+        progress_text = "Calculating battery runtime..."
+        progress_bar = st.progress(0, text=progress_text)
+
+        for i in range(3):
+            time.sleep(0.5)
+            progress_bar.progress(i*50, text=progress_text)
+        time.sleep(1)
+        progress_bar.empty()
 
         result = f"""**Estimated Battery Runtime: {DeviceBattery.battery_runtime//365:.0f} year(s) {DeviceBattery.battery_runtime/365%1*365:.0f} day(s)**
         \n- Operating Temperature Limits: {DeviceBattery.min_operating_temp}°C to {DeviceBattery.max_operating_temp}°C
