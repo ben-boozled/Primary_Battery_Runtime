@@ -1,10 +1,8 @@
 # Description
-This repository contains the code for a calculator that estimates the runtime of non-rechargeable lithium metal and alkaline batteries. Feel free to try out the calculator application [here](https://primary-battery-runtime.streamlit.app/). 
+This repository contains the code for a calculator that estimates the runtime of non-rechargeable lithium metal and alkaline batteries. Feel free to try out the calculator application [here](https://primary-battery-runtime.streamlit.app/). The calculator uses performance data of the **Energiser L91 Ultimate Lithium AA Battery** and **Energiser LR6 Alkaline AA Battery** to estimate key battery performance parameters, such as the effects of temperature on battery capacity.
 
 # Running Locally
-If you are interested in running the application locally, I recommend first creating a Python virual environment. 
-
-Open the command line and follow the steps below:
+If you are interested in running the application locally, I recommend first creating a Python virual environment. Open the command line and follow the steps below:
 1. Change the working directory to the location where you want to clone the repository.
 ```
 cd <path to working directory>
@@ -34,4 +32,4 @@ pip install -r requirements.txt
 streamlit run battery_runtime_app.py
 ```
 
-To deactivate virtual environment, Enter `deactivate` into the command line.
+To deactivate the virtual environment, Enter `deactivate` into the command line.
