@@ -1,15 +1,34 @@
+# Description
+This repository contains the code for a primary battery runtime calculator that estimates the runtime of lithium metal and alkaline batteries. Feel free to try out the calculator application [here](https://primary-battery-runtime.streamlit.app/). 
 
-[Description of file]
+# Running Locally
+If you are interested in running the application locally, I recommend first creating a Python virual environment. 
 
-[Running locally]
+Open the command line and follow the steps below:
+1. Change the working directory to the location where you want to clone the repository.
+2. Clone the respository.
+'''
+git clone https://github.com/ben-boozled/Primary_Battery_Runtime.git
+'''
+3. Change the working directory to 'Primary_Battery_Runtime/'.
+'''
+cd Primary_Battery_Runtime
+'''
+4. Create a virtual environment.
+'''
+python -m venv <name of virtual environment>
+'''
+5. Activate the virtual environment. 
+'''
+<name of virtual environment>\Scripts\activate
+'''
+6. Install the necessary dependencies in the 'requirements.txt' file.
+'''
+pip install -r requirements.txt
+'''
+7. Run the app locally (a browser window will automatically open to host the application).
+'''
+streamlit run battery_runtime_app.py
+'''
 
-[Instructions to create Python virtual environment]
-
-1. Clone repository into a directory
-2. Open command line
-3. Enter the directory to create the virtual environment.
-4. python -m venv <name of virtual environment>
-5. To activate virtual environment, run <name of virtual environment>\Scripts\activate
-6. "pip install -r requirements.txt"
-7. To run locally, enter streamlit run battery_runtime_app.py (browser will automatically open with local host).
-8. To deactivate virtual environment, enter "deactivate".
+To deactivate virtual environment, Enter 'deactivate' into the command line.
